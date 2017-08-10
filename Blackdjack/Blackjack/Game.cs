@@ -11,10 +11,10 @@ namespace Blackdjack.Blackjack
         Shoe shoe;
         Hand player;
         Hand dealer;
-        public int PlayerWinsCount { get; private set; }
-        public int DealerWinsCount { get; private set; }
+        GameState gameState;
+        
 
-        public int PlayerPointsCount { get { return player.PointCount; } } 
+        public int PlayerPointsCount { get { return player.PointCount; } }
         public int DealerPointsCount { get { return dealer.PointCount; } }
 
         public bool isShuffleActive { get; private set; }
@@ -22,10 +22,11 @@ namespace Blackdjack.Blackjack
         public Game(int countOfDecks = 1)
         {
             isShuffleActive = false;
-            PlayerWinsCount = DealerWinsCount = 0;
+            //PlayerWinsCount = DealerWinsCount = 0;
             shoe = new Shoe(1);
             player = new Hand();
             dealer = new Hand();
+            gameState = new GameState { PlayerWinsCount = 0, DealerWinsCount = 0 };
         }
 
         public void NewGame()
@@ -36,7 +37,7 @@ namespace Blackdjack.Blackjack
             player.Clean();
             dealer.Clean();
             Card card;
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < Constants.CountOfStartCards; i++)
             {
                 card = shoe.TakeCard();
                 player.AddCard(card, CardValue(card));
@@ -67,14 +68,14 @@ namespace Blackdjack.Blackjack
             //if(shoe.isEmpty)
             //Как передать это состояние на UI?
 
-            while(dealer.PointCount < 17)
+            while(dealer.PointCount < Constants.MaxPointsForDealerHitting)
             {
                 Card card = shoe.TakeCard();
                 dealer.AddCard(card, CardValue(card));
             }
 
             if(player.PointCount > dealer.PointCount 
-                || dealer.PointCount > 21)
+                || dealer.PointCount > Constants.MaxPointsCount)
             {
                 PlayerWin();
             }
@@ -86,49 +87,42 @@ namespace Blackdjack.Blackjack
         
         int CardValue(Card card)
         {
-            switch (card.type)
+            Dictionary<CardType, int> cardTypesValue = new Dictionary<CardType, int>
             {
-                case CardType.Two:
-                    return 2;
-                case CardType.Three:
-                    return 3;
-                case CardType.Four:
-                    return 4;
-                case CardType.Five:
-                    return 5;
-                case CardType.Six:
-                    return 6;
-                case CardType.Seven:
-                    return 7;
-                case CardType.Eight:
-                    return 8;
-                case CardType.Nine:
-                    return 9;
-                case CardType.Ten:
-                    return 10;
-                case CardType.King:
-                    return 10;
-                case CardType.Queen:
-                    return 10;
-                case CardType.Jack:
-                    return 10;
-                case CardType.Ace: //как сделать, чтоб выбирал игрок?
-                    if (player.PointCount < 11)
-                        return 11;
-                    else
-                        return 1;
-                default:
-                    return 0;
+                {CardType.Two, 2 },
+                {CardType.Three, 3 },
+                {CardType.Four, 4 },
+                {CardType.Five, 5 },
+                {CardType.Six, 6 },
+                {CardType.Seven, 7 },
+                {CardType.Eight, 8 },
+                {CardType.Nine, 9 },
+                {CardType.Ten, 10 },
+                {CardType.King, 10 },
+                {CardType.Queen, 10 },
+                {CardType.Jack, 10 }
+            };
+
+            if (card.Type == CardType.Ace)
+            {
+                if (player.PointCount < Constants.MaxPointsForAceCostingEleven)
+                    return 11;
+                else
+                    return 1;
+            }
+            else
+            {
+                return cardTypesValue[card.Type];
             }
         }
 
         void endStep()
         {
-            if (player.PointCount == 21)
+            if (player.PointCount == Constants.MaxPointsCount)
             {
                 PlayerWin();
             }
-            if (player.PointCount > 21)
+            if (player.PointCount > Constants.MaxPointsCount)
             {
                 DealerWin();
             }
@@ -136,13 +130,13 @@ namespace Blackdjack.Blackjack
 
         void PlayerWin()
         {
-            PlayerWinsCount++;
+            gameState.PlayerWinsCount++;
             isShuffleActive = false;
         }
 
         void DealerWin()
         {
-            DealerWinsCount++;
+            gameState.DealerWinsCount++;
             isShuffleActive = false;
         }
     }

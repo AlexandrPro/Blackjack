@@ -48,7 +48,9 @@
     <Compile Include="Blackjack\Card.cs" />
     <Compile Include="Blackjack\CardSuit.cs" />
     <Compile Include="Blackjack\CardType.cs" />
+    <Compile Include="Blackjack\Constants.cs" />
     <Compile Include="Blackjack\Game.cs" />
+    <Compile Include="Blackjack\GameState.cs" />
     <Compile Include="Blackjack\Hand.cs" />
     <Compile Include="Blackjack\IGame.cs" />
     <Compile Include="Blackjack\Shoe.cs" />

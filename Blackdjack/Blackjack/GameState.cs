@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Blackdjack.Blackjack
 {
-    public class Card
+    public class GameState
     {
-        public CardType Type { get; set; }
-        public CardSuit Suit { get; set; }
+        public int PlayerWinsCount { get; set; }
+        public int DealerWinsCount { get; set; }
     }
-    
 }
