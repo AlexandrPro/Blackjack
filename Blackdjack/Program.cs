@@ -1,4 +1,6 @@
 ﻿using Blackdjack.Blackjack;
+using Blackdjack.IoC;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,13 @@ namespace Blackdjack
     {
         static void Main(string[] args)
         {
-            Game game = new Game();
+            IKernel kernel = new StandardKernel(new BlackjackNinjectModule());
+
+            IGame game = kernel.Get<Game>();
             Do(game);
         }
 
-        static void Do(Game game)
+        static void Do(IGame game)
         {
             bool isFinished = false;
             do
@@ -34,7 +38,7 @@ namespace Blackdjack
             } while (!isFinished);
         }
 
-        private static void PlayerChoice(Game game)
+        private static void PlayerChoice(IGame game)
         {
             Console.WriteLine("1 - Еще, 2 - Хватит, 3 - Кол-во побед");
             ConsoleKeyInfo key = Console.ReadKey();
@@ -51,13 +55,13 @@ namespace Blackdjack
             }
         }
 
-        static void PrintGameState(Game game)
+        static void PrintGameState(IGame game)
         {
             Console.WriteLine("Игрок " + game.PlayerPointsCount + " : " 
                 + game.DealerPointsCount + " Дилер");
             
         }
-        static void PrintWins(Game game)
+        static void PrintWins(IGame game)
         {
             Console.WriteLine("Победы: Игрок " + game.PlayerWinsCount
                        + " | " + game.DealerWinsCount + " Дилер");
