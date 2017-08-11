@@ -1,4 +1,5 @@
 ﻿using Blackdjack.Blackjack;
+using Blackdjack.ConsoleUI;
 using Blackdjack.IoC;
 using Ninject;
 using System;
@@ -24,47 +25,31 @@ namespace Blackdjack
             bool isFinished = false;
             do
             {
-                PrintGameState(game);
+                //PrintGameState(game);
+                MyConsoleUI.PrintShuffleScore(game.PlayerPointsCount, game.DealerPointsCount);
                 if (game.isShuffleActive)
                 {
                     PlayerChoice(game);
                 }
                 else
                 {
-                    PrintWins(game);
-                    Console.WriteLine("----New Shuffle----");
+                    MyConsoleUI.PrintWins(GameState.PlayerWinsCount, GameState.DealerWinsCount);
+                    MyConsoleUI.PrintStartShuffle();
                     game.NewGame();
                 }
             } while (!isFinished);
         }
 
+        private delegate void playerAction();
         private static void PlayerChoice(IGame game)
         {
-            Console.WriteLine("1 - Еще, 2 - Хватит, 3 - Кол-во побед");
-            ConsoleKeyInfo key = Console.ReadKey();
-            switch (key.KeyChar)
+            Dictionary<PlayerChoisces, playerAction> operations = new Dictionary<PlayerChoisces, playerAction>
             {
-                case '1':
-                    game.Hit();
-                    break;
-                case '2':
-                    game.Stand();
-                    break;
-                default:
-                    break;
-            }
-        }
+                {PlayerChoisces.Hit, game.Hit },
+                {PlayerChoisces.Stand, game.Stand }
+            };
 
-        static void PrintGameState(IGame game)
-        {
-            Console.WriteLine("Игрок " + game.PlayerPointsCount + " : " 
-                + game.DealerPointsCount + " Дилер");
-            
-        }
-        static void PrintWins(IGame game)
-        {
-            Console.WriteLine("Победы: Игрок " + game.PlayerWinsCount
-                       + " | " + game.DealerWinsCount + " Дилер");
+            operations[MyConsoleUI.AskPlayerChoice()].Invoke();
         }
     }
 }

@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace Blackdjack.Blackjack
 {
-    public class GameState
+    public static class GameState
     {
-        public int PlayerWinsCount { get; set; }
-        public int DealerWinsCount { get; set; }
+        public static int PlayerWinsCount { get; set; }
+        public static int DealerWinsCount { get; set; }
+
+        static GameState()
+        {
+            PlayerWinsCount = 0;
+            DealerWinsCount = 0;
+        }
     }
 }

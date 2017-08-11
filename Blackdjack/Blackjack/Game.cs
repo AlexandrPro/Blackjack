@@ -11,7 +11,6 @@ namespace Blackdjack.Blackjack
         Shoe shoe;
         Hand player;
         Hand dealer;
-        GameState gameState;
         
 
         public int PlayerPointsCount { get { return player.PointCount; } }
@@ -26,7 +25,6 @@ namespace Blackdjack.Blackjack
             shoe = new Shoe(1);
             player = new Hand();
             dealer = new Hand();
-            gameState = new GameState { PlayerWinsCount = 0, DealerWinsCount = 0 };
         }
 
         public void NewGame()
@@ -130,13 +128,13 @@ namespace Blackdjack.Blackjack
 
         void PlayerWin()
         {
-            gameState.PlayerWinsCount++;
+            GameState.PlayerWinsCount++;
             isShuffleActive = false;
         }
 
         void DealerWin()
         {
-            gameState.DealerWinsCount++;
+            GameState.DealerWinsCount++;
             isShuffleActive = false;
         }
     }
