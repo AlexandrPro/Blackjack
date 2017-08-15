@@ -30,6 +30,7 @@ namespace Blackdjack
                 if (game.isShuffleActive)
                 {
                     PlayerChoice(game);
+                    //TODO
                 }
                 else
                 {

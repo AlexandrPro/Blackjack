@@ -56,7 +56,6 @@
     <Compile Include="Blackjack\PlayerChoisces.cs" />
     <Compile Include="Blackjack\Shoe.cs" />
     <Compile Include="ConsoleUI\MyConsoleUI.cs" />
-    <Compile Include="ConsoleUI\I_UI.cs" />
     <Compile Include="IoC\BlackjackNinjectModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
